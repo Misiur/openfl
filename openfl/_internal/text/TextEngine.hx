@@ -703,6 +703,7 @@ class TextEngine {
 		
 		var previousSpaceIndex = -2; // -1 equals not found, -2 saves extra comparison in `breakIndex == previousSpaceIndex`
 		var spaceIndex = text.indexOf (" ");
+		var hasAnySpaces = spaceIndex > -1;
 		var breakIndex = getLineBreakIndex ();
 		
 		var offsetX = 2.0;
@@ -1203,7 +1204,7 @@ class TextEngine {
 					advances = getAdvances (text, textIndex, formatRange.end);
 					widthValue = getAdvancesWidth (advances);
 					
-					if (layoutGroup != null && layoutGroup.startIndex != layoutGroup.endIndex) {
+					if (hasAnySpaces && layoutGroup != null && layoutGroup.startIndex != layoutGroup.endIndex) {
 						
 						layoutGroup.advances = layoutGroup.advances.concat (advances);
 						layoutGroup.width += widthValue;
