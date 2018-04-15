@@ -1207,14 +1207,22 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if openf
 				
 				filterWidth = Math.ceil (rect.width);
 				filterHeight = Math.ceil (rect.height);
-				
-				if (__cacheBitmap != null && (bitmapWidth > __cacheBitmap.width || bitmapHeight > __cacheBitmap.height)) {
+
+				if (__cacheBitmap != null) {
 					
-					bitmapWidth = Std.int (filterWidth * 1.25);
-					bitmapHeight = Std.int (filterHeight * 1.25);
-					
-					needRender = true;
-					
+					if (filterWidth > __cacheBitmap.width || filterHeight > __cacheBitmap.height) {
+						bitmapWidth = Math.ceil (Math.max (filterWidth * 1.25, __cacheBitmap.width));
+						bitmapHeight = Math.ceil (Math.max (filterHeight * 1.25, __cacheBitmap.height));
+
+						needRender = true;
+
+					} else {
+						
+						bitmapWidth = Std.int (__cacheBitmap.width);
+						bitmapHeight = Std.int (__cacheBitmap.height);
+
+					}
+										
 				} else {
 					
 					bitmapWidth = filterWidth;
@@ -1231,7 +1239,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if openf
 				
 				if (rect.width >= 0.5 && rect.height >= 0.5) {
 					
-					if (__cacheBitmapData == null || bitmapWidth > __cacheBitmapData.width || bitmapWidth > __cacheBitmapData.height) {
+					if (__cacheBitmapData == null || bitmapWidth > __cacheBitmapData.width || bitmapHeight > __cacheBitmapData.height) {
 						
 						__cacheBitmapData = new BitmapData (bitmapWidth, bitmapHeight, true, color);
 						
