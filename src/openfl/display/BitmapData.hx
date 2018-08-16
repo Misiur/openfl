@@ -912,25 +912,17 @@ class BitmapData implements IBitmapDrawable {
 		_colorTransform.__invert ();
 		
 		if (!readable) {
-			
-			if (__textureContext == null) {
-				
-				// TODO: Some way to select current GL context for renderer?
-				#if (lime >= "7.0.0")
-				__textureContext = lime.app.Application.current.window.context;
-				#else
-				__textureContext = GL.context;
-				#end
-				
-			}
-			
+
+			var stageRenderer:OpenGLRenderer = cast Lib.current.stage.__renderer;
+
 			if (colorTransform != null) {
 				
 				_colorTransform.__combine (colorTransform);
 				
 			}
 			
-			var renderer = new OpenGLRenderer (__textureContext, this);
+			var renderer = new OpenGLRenderer (stageRenderer.__context, this);
+			renderer.__copyState (stageRenderer);
 			renderer.__allowSmoothing = smoothing;
 			renderer.__setBlendMode (blendMode);
 			
@@ -954,7 +946,9 @@ class BitmapData implements IBitmapDrawable {
 				Matrix.__pool.release (clipMatrix);
 				
 			}
-			
+
+			stageRenderer.__restoreState (renderer);
+
 		} else {
 			
 			#if ((js && html5) || lime_cairo)
